@@ -303,13 +303,31 @@ describe("FilePathLinkProvider", () => {
 	});
 
 	describe("handleActivation", () => {
-		it("should require metaKey (Cmd) for activation", async () => {
+		it("should activate on plain click", async () => {
 			const terminal = createMockTerminal([{ text: "/path/file.ts" }]);
 			const onOpen = mock();
 			const provider = new FilePathLinkProvider(terminal, onOpen);
 
 			const links = await getLinks(provider, 1);
 			const mockEvent = {
+				metaKey: false,
+				ctrlKey: false,
+				preventDefault: mock(),
+			} as unknown as MouseEvent;
+
+			links[0].activate(mockEvent, "/path/file.ts");
+
+			expect(onOpen).toHaveBeenCalled();
+		});
+
+		it("should not activate with non-primary mouse buttons", async () => {
+			const terminal = createMockTerminal([{ text: "/path/file.ts" }]);
+			const onOpen = mock();
+			const provider = new FilePathLinkProvider(terminal, onOpen);
+
+			const links = await getLinks(provider, 1);
+			const mockEvent = {
+				button: 2,
 				metaKey: false,
 				ctrlKey: false,
 				preventDefault: mock(),

@@ -351,13 +351,31 @@ describe("UrlLinkProvider", () => {
 	});
 
 	describe("handleActivation", () => {
-		it("should require metaKey (Cmd) or ctrlKey for activation", async () => {
+		it("should activate on plain click", async () => {
 			const terminal = createMockTerminal([{ text: "https://example.com" }]);
 			const onOpen = mock();
 			const provider = new UrlLinkProvider(terminal, onOpen);
 
 			const links = await getLinks(provider, 1);
 			const mockEvent = {
+				metaKey: false,
+				ctrlKey: false,
+				preventDefault: mock(),
+			} as unknown as MouseEvent;
+
+			links[0].activate(mockEvent, "https://example.com");
+
+			expect(onOpen).toHaveBeenCalled();
+		});
+
+		it("should not activate with non-primary mouse buttons", async () => {
+			const terminal = createMockTerminal([{ text: "https://example.com" }]);
+			const onOpen = mock();
+			const provider = new UrlLinkProvider(terminal, onOpen);
+
+			const links = await getLinks(provider, 1);
+			const mockEvent = {
+				button: 2,
 				metaKey: false,
 				ctrlKey: false,
 				preventDefault: mock(),

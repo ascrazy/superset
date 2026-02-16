@@ -766,6 +766,8 @@ export function setupClickToMoveCursor(
 		if (event.metaKey || event.ctrlKey || event.altKey || event.shiftKey)
 			return;
 		if (xterm.hasSelection()) return;
+		// Avoid conflicting with link activation.
+		if (xterm.element?.classList.contains("xterm-cursor-pointer")) return;
 
 		const coords = getTerminalCoordsFromEvent(xterm, event);
 		if (!coords) return;

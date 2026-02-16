@@ -268,7 +268,7 @@ export class FilePathLinkProvider implements ILinkProvider {
 	}
 
 	private handleActivation(event: MouseEvent, parsedLink: IParsedLink): void {
-		if (!event.metaKey && !event.ctrlKey) {
+		if (event.button === 1 || event.button === 2) {
 			return;
 		}
 
@@ -312,7 +312,7 @@ export class FilePathLinkProvider implements ILinkProvider {
 		event: MouseEvent,
 		fallback: IFallbackLink,
 	): void {
-		if (!event.metaKey && !event.ctrlKey) {
+		if (event.button === 1 || event.button === 2) {
 			return;
 		}
 

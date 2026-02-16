@@ -68,7 +68,7 @@ export class UrlLinkProvider extends MultiLineLinkProvider {
 	}
 
 	protected handleActivation(event: MouseEvent, text: string): void {
-		if (!event.metaKey && !event.ctrlKey) {
+		if (event.button === 1 || event.button === 2) {
 			return;
 		}
 
